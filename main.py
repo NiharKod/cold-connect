@@ -20,7 +20,7 @@ SENDER_PASSWORD = os.environ["APP_PASS"]  # Or app password if 2FA is enabled
 
 print(SENDER_PASSWORD)
 
-TO_EMAIL = 'skodkani@yahoo.com'
+TO_EMAIL = 'niharkodkanibusiness@gmail.com'
 BCC_EMAIL = 'nkodkani@purdue.edu'  # BCC recipient
 SUBJECT = 'Sent using python'
 BODY_TEXT = 'This is a simple text email sent from Python!'
