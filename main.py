@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import smtplib
 from email.mime.text import MIMEText
+import pandas as pd
 
 
 # Load environment variables from .env file
@@ -20,16 +21,21 @@ SENDER_PASSWORD = os.environ["APP_PASS"]  # Or app password if 2FA is enabled
 
 print(SENDER_PASSWORD)
 
-TO_EMAIL = 'niharkodkanibusiness@gmail.com'
+TO_EMAIL = 'yolinac315@cpaurl.com'
 BCC_EMAIL = 'nkodkani@purdue.edu'  # BCC recipient
 SUBJECT = 'Sent using python'
-BODY_TEXT = 'This is a simple text email sent from Python!'
+
+file = open("email_body.txt", "r")
+
+BODY_TEXT = file.read()
+
+file.close()
 
 
 msg = MIMEText(BODY_TEXT, 'plain')  # 'plain' for a simple text email
 msg['From'] = SENDER_EMAIL
 msg['To'] = TO_EMAIL
-msg['Bcc'] = BCC_EMAIL
+# msg['Bcc'] = BCC_EMAIL
 msg['Subject'] = SUBJECT
 
 # Send the email
