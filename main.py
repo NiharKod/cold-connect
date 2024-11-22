@@ -9,9 +9,29 @@ import pandas as pd
 # Load environment variables from .env file
 load_dotenv("config.env")
 
+# Load the data
+df = pd.read_csv("startups.csv")
+
+
+file = open("email_body.txt", "r")
+body = file.read()
+file.close()
+
+file = open("out.txt", "w")
 #Setup the API key for Gemini
 genai.configure(api_key=os.environ["GEMINI_KEY"])
 model = genai.GenerativeModel("gemini-1.5-flash")
+
+email_list = []
+for (index, row) in df.iterrows():
+    email_list.append((row["Name"], row["Email"], body + model.generate_content("I am writing an email to " + row["Name"] + " about wanting to intern at the company. Please write 1 or 2 sentences which I can add in my email about why working at the following company would be interesting. Please do not provide me any options. Just go with any Ue the given description :" + row["Description"]).text + "\nThank you so much, I look forward to hearing back.\n Best, Nihar Kodkani\n"))
+    email_list[index][2].replace(">", " ")
+    file.write(email_list[index][2])
+    
+# Send the emails
+    
+
+
 
 # Setup email
 SMTP_SERVER = 'smtp.gmail.com'
@@ -19,17 +39,12 @@ SMTP_PORT = 587  # TLS port
 SENDER_EMAIL = 'nihar.kodkani@gmail.com'
 SENDER_PASSWORD = os.environ["APP_PASS"]  # Or app password if 2FA is enabled
 
-print(SENDER_PASSWORD)
 
 TO_EMAIL = 'yolinac315@cpaurl.com'
 BCC_EMAIL = 'nkodkani@purdue.edu'  # BCC recipient
 SUBJECT = 'Sent using python'
 
-file = open("email_body.txt", "r")
 
-BODY_TEXT = file.read()
-
-file.close()
 
 
 msg = MIMEText(BODY_TEXT, 'plain')  # 'plain' for a simple text email
