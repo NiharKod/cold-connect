@@ -4,7 +4,7 @@ import google.generativeai as genai
 import smtplib
 from email.mime.text import MIMEText
 import pandas as pd
-
+import time
 
 # Load environment variables from .env file
 load_dotenv("config.env")
@@ -24,13 +24,14 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 
 email_list = []
 for (index, row) in df.iterrows():
-    email_list.append((row["Name"], row["Email"], body + model.generate_content("I am writing an email to " + row["Name"] + " about wanting to intern at the company. Please write 1 or 2 sentences which I can add in my email about why working at the following company would be interesting. Please do not provide me any options. Just go with any Ue the given description :" + row["Description"]).text + "\nThank you so much, I look forward to hearing back.\n Best, Nihar Kodkani\n"))
-    email_list[index][2].replace(">", " ")
-    file.write(email_list[index][2])
-    
-# Send the emails
-    
-
+    try:
+        email_list.append((row["Name"], row["Email"], body + model.generate_content("I am writing an email to " + row["Name"] + " about wanting to intern at the company. Please write 1 or 2 sentences which I can add in my email about why working at the following company would be interesting. Please do not provide me any options. MAKE SURE THE TEXT SOUNDS NATURAL. ENSURE THAT THERE ARE NO BRACKETS OR ANYTHING DO NOT GIVE ANY OPTIONS. USE the given description :" + row["Description"]).text + "\n I am looking for a software engineering internship for Summer 2025, and wanted to know if there were any opportunities.\n Thank you so much, I look forward to hearing back.\n Best, Nihar Kodkani\n"))
+        email_list[index][2].replace(">", " ")
+        file.write(email_list[index][2])
+        if index % 15 == 0:
+            time.sleep(60)
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 # Setup email
